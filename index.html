@@ -317,6 +317,29 @@
             opacity: 0.7;
         }
 
+        /* Spinner Loading Animation */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-loading .spinner {
+            display: inline-block;
+        }
+
         /* ==================== RESPONSIVE ==================== */
         @media (max-width: 768px) {
             .card {
@@ -480,7 +503,7 @@
             <!-- ==================== STEP 2: PICK A TIME ==================== -->
             <div class="step hidden" data-step="2">
                 <h2>When should our adventure begin? 🌸</h2>
-                <p style="margin: 20px 0; color: #888;">Chọn ngày và giờ để chúng mình gặp nhau</p>
+                <p style="margin: 20px 0; color: #888;">Chọn ngày và giờ để chúng ta gặp nhau</p>
                 
                 <label for="dateInput">📅 Chọn Ngày</label>
                 <input type="date" id="dateInput" required>
@@ -497,7 +520,7 @@
             <!-- ==================== STEP 3: FOOD MISSION ==================== -->
             <div class="step hidden" data-step="3">
                 <h2>What shall we eat? 🍽️</h2>
-                <p style="margin: 20px 0; color: #888;">Chọn món ăn yêu thích của cục cưng phát</p>
+                <p style="margin: 20px 0; color: #888;">Chọn món ăn yêu thích của bạn</p>
                 
                 <div class="food-grid">
                     <div class="food-item" onclick="selectFood(this, 'Jollibee')">
@@ -506,11 +529,11 @@
                     </div>
                     <div class="food-item" onclick="selectFood(this, 'Ramen')">
                         <span class="food-emoji">🍜</span>
-                        <span class="food-name">gà nướng mật ong</span>
+                        <span class="food-name">Ramen</span>
                     </div>
                     <div class="food-item" onclick="selectFood(this, 'Hot Pot')">
                         <span class="food-emoji">🍲</span>
-                        <span class="food-name">sườn xào chua ngọt</span>
+                        <span class="food-name">Hot Pot</span>
                     </div>
                     <div class="food-item" onclick="selectFood(this, 'BBQ')">
                         <span class="food-emoji">🥩</span>
@@ -554,13 +577,13 @@
             <div class="step hidden" data-step="5">
                 <div class="thank-you-content">
                     <div class="thank-you-emoji">💌</div>
-                    <h1>Hẹn gặp em nhé! 🥰</h1>
+                    <h1>Hẹn gặp cậu nhé! 🥰</h1>
                     <p style="margin: 30px 0; font-size: 1.1rem; color: #d63384; font-weight: 500;">
-                        Lời mời của em đã được gửi thành công!
+                        Lời mời của bạn đã được gửi thành công!
                     </p>
                     <p style="margin: 20px 0; color: #888;">
-                        Cảm ơn em đã trao của đời của mình cho anh! 💝<br>
-                
+                        Cảm ơn bạn đã chọn để hẹn hò cùng tôi 💝<br>
+                        Tôi đã không thể chờ để gặp bạn!
                     </p>
                     <div class="button-group">
                         <button class="btn-primary" onclick="resetForm()">↻ Làm lại</button>
@@ -580,8 +603,8 @@
         //    https://api.telegram.org/bot<BOT_TOKEN>/getUpdates
         //    Tìm chat_id trong response
         
-        const BOT_TOKEN = '8498552893:AAEWL4VF500GDs22Og0cuPi4FUQzwpoS3cU';        // Thay bằng token thực
-        const CHAT_ID = '7212126830';           // Thay bằng chat ID thực
+        const BOT_TOKEN = 'YOUR_BOT_TOKEN';        // Thay bằng token thực
+        const CHAT_ID = 'YOUR_CHAT_ID';           // Thay bằng chat ID thực
 
         /* ==================== GLOBAL STATE ==================== */
         let formData = {
@@ -593,7 +616,7 @@
         /* ==================== STEP NAVIGATION ==================== */
         function goToStep(stepNumber) {
             // Lưu dữ liệu trước khi chuyển bước
-            if (stepNumber === 2) {
+            if (stepNumber === 3) {
                 const dateValue = document.getElementById('dateInput').value;
                 const timeValue = document.getElementById('timeInput').value;
                 
@@ -674,7 +697,8 @@
 
             // Hiệu ứng loading
             sendBtn.classList.add('btn-loading');
-            sendBtn.textContent = 'Đang gửi...';
+            sendBtn.innerHTML = '<span class="spinner"></span>Đang gửi...';
+            sendBtn.disabled = true;
 
             try {
                 // Chuẩn bị thông điệp
@@ -729,7 +753,8 @@ Lời mời được tạo bằng: https://date-invitation.app 💌
                 alert(`❌ Lỗi gửi tin nhắn:\n${error.message}\n\nVui lòng kiểm tra BOT_TOKEN và CHAT_ID.`);
                 
                 sendBtn.classList.remove('btn-loading');
-                sendBtn.textContent = 'Confirm & Send 💌';
+                sendBtn.innerHTML = 'Confirm & Send 💌';
+                sendBtn.disabled = false;
             }
         }
 
